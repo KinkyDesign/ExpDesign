@@ -1,0 +1,19 @@
+ExpDesignPkg-package    Experimental design
+dat1                    A sample data object
+dat1i                   Information for experimental design function
+                        suggest.trials.xy
+dat1m                   Serialized experimental design model file
+dat1p                   A sample data object
+dat2i                   Information for experimental design function
+                        suggest.trials.noxy
+dat2m                   Serialized factorial experimental design model
+                        file
+exp.design.noxy         Experimental design function for (full)
+                        factorial designs
+exp.design.xy           Experimental design function with X and/or y
+                        values
+r2.adj.funct            Adjusted R2 function
+r2.funct                R2 function
+suggest.trials.noxy     Returns suggested trials for a factorial design
+suggest.trials.xy       Returns suggested trials when data are
+                        available
