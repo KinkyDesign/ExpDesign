@@ -9,4 +9,4 @@ Depends: RCurl, pmml, jsonlite, AlgDesign, pls
 Description: This package performs experimental design by employing algorithmic design R routines from the AlgDesign package. The Brandmaier et al method is also employed. 
 License: GPL-2
 NeedsCompilation: no
-Packaged: 2016-01-13 14:55:10 UTC; georgia
+Packaged: 2016-01-18 09:53:16 UTC; georgia
