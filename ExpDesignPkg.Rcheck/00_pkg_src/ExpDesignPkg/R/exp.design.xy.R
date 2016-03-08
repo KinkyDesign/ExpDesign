@@ -65,7 +65,7 @@ exp.design.xy<- function(dataset,predictionFeature,parameters){
 	
 	}else{
 
-		protc.pca<- prcomp(t(dat),center = TRUE)
+		protc.pca<- prcomp(na.omit(t(dat)),center = TRUE)
 		form.int<- if(parameters$form=='linear'){as.formula('~.')}else{as.formula(paste('~',form,'(.)',sep=''))} 
 	
 		desD.int<- optFederov(form.int,protc.pca$x[,1:4],parameters$nTrials,evaluateI=TRUE,DFrac=1,nRepeats=100)#

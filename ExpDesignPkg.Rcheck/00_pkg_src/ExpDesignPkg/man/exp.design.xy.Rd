@@ -15,10 +15,10 @@ exp.design.xy(dataset, predictionFeature, parameters)
 }
   \item{predictionFeature}{ character string specifying which is the prediction feature in dataEntry 
 }
-  \item{parameters}{list with parameter values for experimental design. 4 objects should be included, i.e. nTrials a numeric value indicating number of trials suggested, if 0 then an estimated number is suggested, criterion a character value to indicate which optimal deisgn to apply (possible values are  'D', 'A', 'I'), form a string indicating the formula of the deisgn (possible formulas are 'linear','quad','cubic','cubicS'), r2.threshold a numeric value indicating the r2 threshold value (If the data supplied provides
-  r2 value greater than the threshold value, a warning message is returned.).}
+  \item{parameters}{list with parameter values for experimental design. 5 objects should be included, i.e. nTrials a numeric value indicating number of trials suggested, if 0 then an estimated number is suggested, criterion a character value to indicate which optimal deisgn to apply (possible values are  'D', 'A', 'I'), form a string indicating the formula of the deisgn (possible formulas are 'linear','quad','cubic','cubicS'), r2.threshold a numeric value indicating the r2 threshold value (If the data supplied provides
+  r2 value greater than the threshold value, a warning message is returned.). The 5th object is only needed in case the dependent variable is not available yet, then a new parameter should be added, called 'newY' which is a character string with the name of the new dependent feature.
 }
-
+}
 \details{No details required }
 
 \value{A List 

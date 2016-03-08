@@ -25,15 +25,18 @@ function(dataset,predictionFeature,parameters){
     desD.int<- 	optFederov(form.int,fact.data,dat$nTrials,evaluateI=TRUE,DFrac=1,nRepeats=100)#
     desD.eval<- eval.design(form.int,fact.data,dat$nTrials)
     
-    suggested.trials<- cbind(as.matrix(fact.data),rep(0,nrow(fact.data)))
+    suggested.trials<- matrix(0,dat$levels^dat$nVars,(dat$nVars+1))
+    suggested.trials[desD.int$rows,1:dat$nVars]<- as.matrix(desD.int$design)
     suggested.trials[desD.int$rows,(dat$nVars+1)]<- 1
-
     
     # return:
+    desD.res<- list(design=desD.int$design,selected.rows=desD.int$rows,
+                    norm.var=desD.int$Ge,confounding.effect=desD.eval$diagonality)
     
     verbal.in<- c(paste('Ge value is:',desD.int$Ge,'. Ge for optimal design is 1.', sep=''),
                   paste('Diagonality value is:',desD.eval$diagonality,'. Diagonality for minimal confounding is 1.', sep=''))
     
+    # return:
     suggested.trials.ser<- serialize(list(Trials=suggested.trials),connection=NULL)
     #pred.name<- 'suggestedTrials'
     pred.name<- c(paste('suggestedTrials_',dat$varNames,sep=''),'suggestedTrials')

@@ -1,7 +1,7 @@
 Package: ExpDesignPkg
 Type: Package
 Title: Experimental design
-Version: 1.1
+Version: 1.5
 Date: 2015-12-07
 Author: Georgia Tsiliki
 Maintainer: Georgia Tsiliki <gtsiliki@central.ntua.gr>
@@ -9,4 +9,4 @@ Depends: RCurl, pmml, jsonlite, AlgDesign, pls
 Description: This package performs experimental design by employing algorithmic design R routines from the AlgDesign package. The Brandmaier et al method is also employed. 
 License: GPL-2
 NeedsCompilation: no
-Packaged: 2016-01-18 09:53:16 UTC; georgia
+Packaged: 2016-03-08 10:09:15 UTC; root

@@ -1,0 +1,696 @@
+\nonstopmode{}
+\documentclass[letterpaper]{book}
+\usepackage[times,inconsolata,hyper]{Rd}
+\usepackage{makeidx}
+\usepackage[utf8,latin1]{inputenc}
+% \usepackage{graphicx} % @USE GRAPHICX@
+\makeindex{}
+\begin{document}
+\chapter*{}
+\begin{center}
+{\textbf{\huge Package `ExpDesignPkg'}}
+\par\bigskip{\large \today}
+\end{center}
+\begin{description}
+\raggedright{}
+\item[Type]\AsIs{Package}
+\item[Title]\AsIs{Experimental design}
+\item[Version]\AsIs{1.5}
+\item[Date]\AsIs{2015-12-07}
+\item[Author]\AsIs{Georgia Tsiliki}
+\item[Maintainer]\AsIs{Georgia Tsiliki }\email{gtsiliki@central.ntua.gr}\AsIs{}
+\item[Depends]\AsIs{RCurl, pmml, jsonlite, AlgDesign, pls}
+\item[Description]\AsIs{This package performs experimental design by employing algorithmic design R routines from the AlgDesign package. The Brandmaier et al method is also employed.}
+\item[License]\AsIs{GPL-2}
+\item[NeedsCompilation]\AsIs{no}
+\end{description}
+\Rdcontents{\R{} topics documented:}
+\inputencoding{utf8}
+\HeaderA{ExpDesignPkg-package}{Experimental design}{ExpDesignPkg.Rdash.package}
+\aliasA{ExpDesignPkg}{ExpDesignPkg-package}{ExpDesignPkg}
+\keyword{package}{ExpDesignPkg-package}
+%
+\begin{Description}\relax
+Calculates an exact or approximate algorithmic design for one of three criteria, using Federov's exchange algorithm from AlgDesign package
+\end{Description}
+%
+\begin{Details}\relax
+
+The DESCRIPTION file:
+
+\Tabular{ll}{
+Package: & ExpDesignPkg\\{}
+Type: & Package\\{}
+Title: & Experimental design\\{}
+Version: & 1.5\\{}
+Date: & 2015-12-07\\{}
+Author: & Georgia Tsiliki\\{}
+Maintainer: & Georgia Tsiliki <gtsiliki@central.ntua.gr>\\{}
+Depends: & RCurl, pmml, jsonlite, AlgDesign, pls\\{}
+Description: & This package performs experimental design by employing algorithmic design R routines from the AlgDesign package. The Brandmaier et al method is also employed. \\{}
+License: & GPL-2\\{}
+}
+
+Index of help topics:
+\begin{alltt}
+ExpDesignPkg-package    Experimental design
+dat1                    A sample data object
+dat1i                   Information for experimental design function
+                        suggest.trials.xy
+dat1m                   Serialized experimental design model file
+dat1p                   A sample data object
+dat2i                   Information for experimental design function
+                        suggest.trials.noxy
+dat2m                   Serialized factorial experimental design model
+                        file
+exp.design.noxy         Experimental design function for (full)
+                        factorial designs
+exp.design.xy           Experimental design function with X and/or y
+                        values
+r2.adj.funct            Adjusted R2 function
+r2.funct                R2 function
+suggest.trials.noxy     Returns suggested trials for a factorial design
+suggest.trials.xy       Returns suggested trials when data are
+                        available
+\end{alltt}
+
+The most important functions of the package are exp.design.funct.xy and exp.design.funct.noxy. They produce a a suggested trials vector/ matrix respectively serialized for suggested.trials.xy and suggested.trials.noxy to handle. 
+\end{Details}
+%
+\begin{Author}\relax
+Georgia Tsiliki
+
+Maintainer: Georgia Tsiliki <gtsiliki@central.ntua.gr>
+\end{Author}
+%
+\begin{References}\relax
+Help files of AlgDesign
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+data("dat1")
+
+predF<- "https://apps.ideaconsult.net/enmtest/property/TOX/UNKNOWN_TOXICITY_SECTION/Net+cell+association/8058CA554E48268ECBA8C98A55356854F413673B/3ed642f9-1b42-387a-9966-dea5b91e5f8a"
+
+required.param<- list(nTrials=c(11),criterion='D',form='linear',r2.threshold=0.9)
+
+exp.example<- exp.design.xy(dat1,predF,required.param) 
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{dat1}{A sample data object}{dat1}
+\keyword{datasets}{dat1}
+%
+\begin{Description}\relax
+The dataset for this test is a data frame
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data("dat1")
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A list of two objects
+\begin{description}
+
+\item[datasetURI] a character vector- ambit data set uri
+\item[dataEntry] a data frame containing two columns: compound and values. Compound is a character vector with all compound ambit uris, and values is a data frame with all numberic values of the protein corona data set (compounds by features). One of the columns is the dependent variable (Net.cell.association) which has some null values- the experimental design algorithm will select some/all of them for next suggested trials.
+
+\end{description}
+
+\end{Format}
+%
+\begin{Details}\relax
+There are no more details
+\end{Details}
+%
+\begin{Source}\relax
+The source of this function is in the
+\end{Source}
+%
+\begin{References}\relax
+There are no references
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+data(dat1)
+## maybe str(dat1) ; plot(dat1) ...
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{dat1i}{Information for experimental design function suggest.trials.xy}{dat1i}
+\keyword{datasetsi}{dat1i}
+%
+\begin{Description}\relax
+A list with information for experimental design function suggest.trials.xy
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data("dat1i")
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A list with 8 objects:
+\begin{description}
+
+\item[\code{design}] a numeric matrix with the suggested design for the data
+\item[\code{selected.rows}] the selected rows for all the available combinations of the parameters.
+\item[\code{norm.var}] the normalized variance. This is the Ge value from optFederov(): The minimax normalized variance over X, expressed as an efficiency with respect to the optimal approximate theory design. Optimal value is 1.
+\item[\code{confounding.effect}] the diagonality of the design, excluding the constant if any, from eval.design() function. The optimal number is 1.
+\item[\code{r.squared}] the r2 value for the data supplied
+\item[\code{adj.r.squared}] the adjusted r2 value for the data supplied.
+\item[\code{verbal.notes}] remarks commenting on Ge and diagonality.
+
+\end{description}
+
+\end{Format}
+%
+\begin{Details}\relax
+Example dataset to suggest trials together with dat1p, dat1m
+\end{Details}
+%
+\begin{Source}\relax
+The source of this function is in the
+\end{Source}
+%
+\begin{References}\relax
+There are no references
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+data(dat1i)
+## maybe str(dat1i) ; plot(dat1i) ...
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{dat1m}{Serialized experimental design model file }{dat1m}
+\keyword{datasetsm}{dat1m}
+%
+\begin{Description}\relax
+A character string for a serialized experimental design model, i.e. a list including one vectorindicating which are the next trials that should be conducted.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data("dat1m")
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A character string
+\end{Format}
+%
+\begin{Details}\relax
+Example experimental design model based on dat1
+\end{Details}
+%
+\begin{Source}\relax
+The source of this function is in the
+\end{Source}
+%
+\begin{References}\relax
+There are no references
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+data(dat1m)
+## maybe str(dat1m) ; plot(dat1m) ...
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{dat1p}{A sample data object}{dat1p}
+\keyword{datasetsp}{dat1p}
+%
+\begin{Description}\relax
+The dataset for this test is a data frame
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data("dat1p")
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A list of two objects
+\begin{description}
+
+\item[datasetURI] a character vector- ambit data set uri
+\item[dataEntry] a data frame containing two columns: compound and values. Exactly the same as dat1.
+
+\end{description}
+
+\end{Format}
+%
+\begin{Details}\relax
+Data set for prediction with dat1m, although data are not used by the function
+\end{Details}
+%
+\begin{Source}\relax
+The source of this function is in the
+\end{Source}
+%
+\begin{References}\relax
+There are no references
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+data(dat1p)
+## maybe str(dat1p) ; plot(dat1p) ...
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{dat2i}{Information for experimental design function suggest.trials.noxy}{dat2i}
+\keyword{datasets2i}{dat2i}
+%
+\begin{Description}\relax
+A list with information for experimental design function suggest.trials.noxy
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data("dat2i")
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A list with 6 objects:
+\begin{description}
+
+\item[\code{design}] a numeric matrix with the suggested design for the data
+\item[\code{selected.rows}] the selected rows for all the available combinations of the parameters.
+\item[\code{norm.var}] the normalized variance. This is the Ge value from optFederov(): The minimax normalized variance over X, expressed as an efficiency with respect to the optimal approximate theory design. Optimal value is 1.
+\item[\code{confounding.effect}] the diagonality of the design, excluding the constant if any, from eval.design() function. The optimal number is 1.
+\item[\code{verbal.notes}] remarks commenting on Ge and diagonality.
+
+\end{description}
+
+\end{Format}
+%
+\begin{Details}\relax
+Example dataset to suggest trials together with dat2m
+\end{Details}
+%
+\begin{Source}\relax
+The source of this function is in the
+\end{Source}
+%
+\begin{References}\relax
+There are no references
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+data(dat2i)
+## maybe str(dat2i) ; plot(dat2i) ...
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{dat2m}{Serialized factorial experimental design model file }{dat2m}
+\keyword{datasets2m}{dat2m}
+%
+\begin{Description}\relax
+A character string for a serialized factorial design, i.e. a list including one vector indicating which are the trials that should be conducted.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data("dat2m")
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A character string
+\end{Format}
+%
+\begin{Details}\relax
+Example experimental design model produced by exp.design.noxy function
+\end{Details}
+%
+\begin{References}\relax
+There are no references
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+data(dat2m)
+## maybe str(dat2m) ; plot(dat2m) ...
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{exp.design.noxy}{Experimental design function for (full) factorial designs}{exp.design.noxy}
+\keyword{expDesignNoXY}{exp.design.noxy}
+%
+\begin{Description}\relax
+Calculates an exact or approximate algorithmic design for one of three criteria, using Federov's exchange algorithm from AlgDesign package. The user needs to specify the number of variables and their levels, then a design matrix with suggested trials is produced. Please note in this case, no X or Y values are provided.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+exp.design.noxy(dataset, predictionFeature, parameters)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{dataset}] list of 2 objects, datasetURI and dataEntry - NOT required 
+
+\item[\code{predictionFeature}]  character string specifying which is the prediction feature in dataEntry - NOT required
+
+\item[\code{parameters}] A list with 7 objects: levels, nVars (number of variables), factors (which are the factor variables), varNames (variables' names), nTrials (the number of suggested trials, if 0 then an estimated number is suggested), criterion ('A', 'I', 'D'), form of the design ('linear','quad','cubic','cubicS')
+
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+No details required
+\end{Details}
+%
+\begin{Value}
+A List 
+\begin{ldescription}
+\item[\code{rawModel}]  A serialized numeric matrix indicating the experimental design for the various variables and their levels.
+\item[\code{pmmlModel}]  A pmml object - now empty
+\item[\code{independentFeatures}]  A list with the names of the variables as given by the user.
+\item[\code{predictedFeatures}] A character vector with names for the suggested trials
+\item[\code{additionalInfo}]  A list including the following: design (The design suggested), selected.rows (The rows (nanoparticles) suggested for new trials), norm.values (The minimax normalized variance over X, expressed as an efficiency with respect to the optimal approximate theory design.), confounding.effect (The diagonality of the design, excluding the constant, if any.), verbal.notes (Verbal notes to comment on norm.values and confounding.effect), predictedFeatures (The character string 'suggestedTrials' to indicate the new vector created including all experimental design memberships).
+\end{ldescription}
+\end{Value}
+%
+\begin{Note}\relax
+ No notes for this function 
+\end{Note}
+%
+\begin{Author}\relax
+Georgia Tsiliki
+\end{Author}
+%
+\begin{References}\relax
+The help file of blockcluster package 
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+##---- Should be DIRECTLY executable !! ----
+##-- ==>  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
+
+
+required.param<-  list(levels=3, nVars=3, factors='null', varNames=c('a','b','c'),nTrials=10,criterion='D',form='linear')
+
+
+exp.example<- exp.design.noxy(null,null,required.param) 
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{exp.design.xy}{Experimental design function with X and/or y values }{exp.design.xy}
+\keyword{expDesignXY}{exp.design.xy}
+%
+\begin{Description}\relax
+Calculates an exact or approximate algorithmic design for one of three criteria, using Federov's exchange algorithm from AlgDesign package
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+exp.design.xy(dataset, predictionFeature, parameters)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{dataset}] list of 2 objects, datasetURI:= character sring, code name of dataset, dataEntry:= data frame with 2 columns 
+
+\item[\code{predictionFeature}]  character string specifying which is the prediction feature in dataEntry 
+
+\item[\code{parameters}] list with parameter values for experimental design. 5 objects should be included, i.e. nTrials a numeric value indicating number of trials suggested, if 0 then an estimated number is suggested, criterion a character value to indicate which optimal deisgn to apply (possible values are  'D', 'A', 'I'), form a string indicating the formula of the deisgn (possible formulas are 'linear','quad','cubic','cubicS'), r2.threshold a numeric value indicating the r2 threshold value (If the data supplied provides
+r2 value greater than the threshold value, a warning message is returned.). The 5th object is only needed in case the dependent variable is not available yet, then a new parameter should be added, called 'newY' which is a character string with the name of the new dependent feature.
+
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+No details required 
+\end{Details}
+%
+\begin{Value}
+A List 
+\begin{ldescription}
+\item[\code{rawModel}]  A serialized numeric vector indicating the experimental design memberships of nanoparticles in the data.
+\item[\code{pmmlModel}]  A pmml object - now empty
+\item[\code{independentFeatures}]  A list with Ambit names for all genes/ proteins features included in the model 
+\item[\code{predictedFeatures}] A character vector with names for the suggested trials
+\item[\code{additionalInfo}]  A list including the following: design (The design suggested), selected.rows (The rows (nanoparticles) suggested for new trials), norm.values (The minimax normalized variance over X, expressed as an efficiency with respect to the optimal approximate theory design.), confounding.effect (The diagonality of the design, excluding the constant, if any.), r.squared (when y is given), adj.r.squared (when y is given), verbal.notes (Verbal notes to comment on norm.values and confounding.effect), predictedFeatures (The character string 'suggestedTrials' and 'newY' to indicate the new vectors created including all experimental design memberships).
+\end{ldescription}
+\end{Value}
+%
+\begin{Note}\relax
+ No notes for this function 
+\end{Note}
+%
+\begin{Author}\relax
+Georgia Tsiliki
+\end{Author}
+%
+\begin{References}\relax
+The help file of blockcluster package 
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+##---- Should be DIRECTLY executable !! ----
+##-- ==>  Define data, use random,
+##--  or do  help(data=index)  for the standard data sets.
+
+data("dat1")
+
+predF<- "https://apps.ideaconsult.net/enmtest/property/TOX/UNKNOWN_TOXICITY_SECTION/Net+cell+association/8058CA554E48268ECBA8C98A55356854F413673B/3ed642f9-1b42-387a-9966-dea5b91e5f8a"
+
+required.param<- list(nTrials=c(11),criterion='D',form='linear',r2.threshold=0.9)
+
+exp.example<- exp.design.xy(dat1,predF,required.param) 
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{r2.adj.funct}{ Adjusted R2 function }{r2.adj.funct}
+\keyword{r2adj}{r2.adj.funct}
+%
+\begin{Description}\relax
+Calculates the adjusted R2 value
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+r2.adj.funct(y, y.new, num.pred)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{y}]  observed y values 
+\item[\code{y.new}]  predicted y values 
+\item[\code{num.pred}]  number of parameters in the predicted model
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+No details required 
+\end{Details}
+%
+\begin{Value}
+ A numeric value for the adjusted coefficient of determination R2 
+\end{Value}
+%
+\begin{Author}\relax
+Georgia Tsiliki 
+\end{Author}
+%
+\begin{References}\relax
+ Dobson An introduction to linear modelling 
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+##---- Should be DIRECTLY executable !! ----
+##-- ==>  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
+
+r2.adj.funct(1:10,1:10,2)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{r2.funct}{R2 function}{r2.funct}
+\keyword{r2}{r2.funct}
+%
+\begin{Description}\relax
+ Calculates the R2 value 
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+ r2.funct(y, y.new) 
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{y}]  observed y values
+\item[\code{y.new}]  predicted y values
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+No details required 
+\end{Details}
+%
+\begin{Value}
+A numeric value for the coefficient of determination R2 
+\end{Value}
+%
+\begin{Author}\relax
+ Georgia Tsiliki 
+\end{Author}
+%
+\begin{References}\relax
+Dobson An introduction to linear modelling
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+##---- Should be DIRECTLY executable !! ----
+##-- ==>  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
+
+r2.funct(1:10,1:10)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{suggest.trials.noxy}{Returns suggested trials for a factorial design}{suggest.trials.noxy}
+\keyword{suggestTFF}{suggest.trials.noxy}
+%
+\begin{Description}\relax
+Suggested trials are returned as a list with one object, a numeric matrix with the last column indicating with 1 the suggested trial
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+suggest.trials.noxy(dataset, rawModel, additionalInfo)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{dataset}]  Data for prediction. A list of two objects: datasetURI (a character string ), dataEntry (a data frame).
+\item[\code{rawModel}]  R model serialized (suggested trials for the data matrix supplied in exp.design.funct1). 
+
+\item[\code{additionalInfo}]  Any additional information needed for rawModel. Here the list generated by exp.design.funct.noxy. The list should contain a field named 'predictedFeatures' which should be exactly the same as that returned by exp.design.funct.noxy function. 
+
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+ No further details required 
+\end{Details}
+%
+\begin{Value}
+A list of one objected called 'predictions' which is also a list of one cell data-frames each containing the suggested trials for the data tested. This object is a matrix for the suggested trials per variable and level; the last column indicates with 1 the suggested trial
+\end{Value}
+%
+\begin{Note}\relax
+ No notes for this function 
+\end{Note}
+%
+\begin{Author}\relax
+Georgia Tsiliki
+\end{Author}
+%
+\begin{References}\relax
+ No references required 
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+##---- Should be DIRECTLY executable !! ----
+##-- ==>  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
+
+
+data("dat2m")
+data("dat2i")
+
+pred.res<- suggest.trials.noxy(null, dat2m, dat2i) 
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{suggest.trials.xy}{Returns suggested trials when data are available}{suggest.trials.xy}
+\keyword{suggestT}{suggest.trials.xy}
+%
+\begin{Description}\relax
+Suggested trials are returned as a list with one object, a binary vector where 1 indicates suggested trial
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+suggest.trials.xy(dataset, rawModel, additionalInfo)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{dataset}]  Data for prediction. A list of two objects: datasetURI (a character string ), dataEntry (a data frame).
+\item[\code{rawModel}]  R model serialized (suggested trials for the data matrix supplied in exp.design.funct1). 
+
+\item[\code{additionalInfo}]  Any additional information needed for rawModel. Here the list generated by exp.design.funct.xy. The list should contain a field named 'predictedFeatures' which should be exactly the same as that returned by exp.design.funct.xy function. 
+
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+ No further details required 
+\end{Details}
+%
+\begin{Value}
+A list of one objected called 'predictions' which is also a list of one cell data-frames each containing the suggested trials for the data tested. This object is a binary vector with 1 indicates suggested trial
+\end{Value}
+%
+\begin{Note}\relax
+ No notes for this function 
+\end{Note}
+%
+\begin{Author}\relax
+Georgia Tsiliki
+\end{Author}
+%
+\begin{References}\relax
+ No references required 
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+##---- Should be DIRECTLY executable !! ----
+##-- ==>  Define data, use random,
+##--  or do  help(data=index)  for the standard data sets.
+
+data("dat1p")
+data("dat1m")
+data("dat1i")
+
+pred.res<- suggest.trials.xy(dat1p, dat1m, dat1i) 
+
+\end{ExampleCode}
+\end{Examples}
+\printindex{}
+\end{document}

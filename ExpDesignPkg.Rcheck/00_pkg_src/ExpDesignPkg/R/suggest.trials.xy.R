@@ -16,8 +16,9 @@ function(dataset,rawModel,additionalInfo){
     
     
     for(i in 1:length(sug.trials)){
-        w1<- data.frame(sug.trials[i],0)
-        colnames(w1)<- sug.name
+	#if(length(sug.name)>1){w1<- data.frame(sug.trials[i],NA)}else{w1<- data.frame(sug.trials[i])}
+        w1<- data.frame(sug.trials[i],NA)
+	colnames(w1)<- sug.name
         if(i==1){p7.1<- list(unbox(w1))
         }else{
             p7.1[[i]]<- unbox(w1)

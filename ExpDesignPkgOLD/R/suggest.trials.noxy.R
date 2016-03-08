@@ -1,12 +1,12 @@
-suggest.trials.xy <-
+suggest.trials.noxy <-
 function(dataset,rawModel,additionalInfo){
-    #dataset:= list of 2 objects - 
+    #dataset:= list of 2 objects - HERE EMPTY
     #datasetURI:= character sring, code name of dataset
     #dataEntry:= data.frame with 2 columns, 
     #1st:name of compound,2nd:data.frame with values (colnames are feature names)
     #rawModel:= numeric vector showing experimental design results   
-    #additionalInfo:= list with summary statistics, returns design matrix with 
-    #suggested trials for y (whether or not y was originally supplied)
+    #additionalInfo:= list with summary statistics, returns design matrix with suggested trials
+    #Outputs can vary, because options could have identical value based on Federov's method. 
     
     dat1.m<- rawModel
     dat1.m<- base64Decode(dat1.m,'raw')
@@ -15,10 +15,9 @@ function(dataset,rawModel,additionalInfo){
     sug.name<- additionalInfo$predictedFeatures
     
     
-    for(i in 1:length(sug.trials)){
-	#if(length(sug.name)>1){w1<- data.frame(sug.trials[i],NA)}else{w1<- data.frame(sug.trials[i])}
-        w1<- data.frame(sug.trials[i],NA)
-	colnames(w1)<- sug.name
+    for(i in 1:dim(sug.trials)[1]){
+        w1<- as.data.frame(t(sug.trials[i,]))
+        colnames(w1)<- sug.name
         if(i==1){p7.1<- list(unbox(w1))
         }else{
             p7.1[[i]]<- unbox(w1)
