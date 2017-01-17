@@ -3,7 +3,7 @@
 
 \title{Returns suggested trials for a factorial design}
 
-\description{Suggested trials are returned as a list with one object, a numeric matrix with the last column indicating with 1 the suggested trial}
+\description{Suggested trials are returned as a list with one object, a numeric matrix with the last column indicating with 1 the suggested trials. A column with NA values is added for the value sof the new experiments to be added.}
 
 \usage{
 suggest.trials.noxy(dataset, rawModel, additionalInfo)

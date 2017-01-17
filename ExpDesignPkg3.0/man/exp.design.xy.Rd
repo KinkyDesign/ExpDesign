@@ -27,6 +27,7 @@ exp.design.xy(dataset, predictionFeature, parameters)
   \item{independentFeatures}{ A list with Ambit names for all genes/ proteins features included in the model }
   \item{predictedFeatures}{A character vector with names for the suggested trials}
   \item{additionalInfo}{ A list including the following: design (The design suggested), selected.rows (The rows (nanoparticles) suggested for new trials), norm.values (The minimax normalized variance over X, expressed as an efficiency with respect to the optimal approximate theory design.), confounding.effect (The diagonality of the design, excluding the constant, if any.), r.squared (when y is given), adj.r.squared (when y is given), verbal.notes (Verbal notes to comment on norm.values and confounding.effect), predictedFeatures (The character string 'suggestedTrials' and 'newY' to indicate the new vectors created including all experimental design memberships).}
+  Note: When the number of trials (nTrials) is higher than the number of y empty values, all values are suggested by the design algorithm.
 }
 
 \references{The help file of blockcluster package }

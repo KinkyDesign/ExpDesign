@@ -17,26 +17,42 @@ function(dataset,predictionFeature,parameters){
     #Outputs can vary, because options could have identical value based on Federov's method. 
     
     dat<- parameters
-    if(dat$factors=='null'){fact.data<- gen.factorial(levels=dat$levels,nVars=dat$nVars,varNames=dat$varNames)
+    levels1<- as.numeric(lapply(dat$levels,function(x)length(x)))
+    levels2<- lapply(dat$levels,function(x)unique(x))
+    
+    if(prod(dat$factors)!=0){#!#if(dat$factors!='null'){
+        fact.data<- gen.factorial(levels=levels1,nVars=dat$nVars,factors=dat$factors,varNames=dat$varNames)		
     }else{
-        fact.data<- gen.factorial(levels=dat$levels,nVars=dat$nVars,factors=dat$factors,varNames=dat$varNames)}
+	dat$factors<- 'null'
+        fact.data<- gen.factorial(levels=levels1,nVars=dat$nVars,varNames=dat$varNames)
+    }
     
     form.int<- if(dat$form=='linear'){as.formula('~.')}else{as.formula(paste('~',dat$form,'(.)',sep=''))}
-    desD.int<- 	optFederov(form.int,fact.data,dat$nTrials,evaluateI=TRUE,DFrac=1,nRepeats=100)#
+    desD.int<- 	optFederov(form.int,fact.data,dat$nTrials,evaluateI=TRUE,DFrac=1,nRepeats=100,approximate=T)#
     desD.eval<- eval.design(form.int,fact.data,dat$nTrials)
     
-    suggested.trials<- cbind(as.matrix(fact.data),rep(0,nrow(fact.data)))
+    suggested.trials<- cbind(as.matrix(fact.data),rep(0,nrow(fact.data)))#matrix(0,dat$levels^dat$nVars,(dat$nVars+1))
+    #suggested.trials[desD.int$rows,1:dat$nVars]<- as.matrix(desD.int$design)
     suggested.trials[desD.int$rows,(dat$nVars+1)]<- 1
-
     
     # return:
+    #desD.res<- list(design=desD.int$design,selected.rows=desD.int$rows,
+    #norm.var=desD.int$Ge,confounding.effect=desD.eval$diagonality)
     
     verbal.in<- c(paste('Ge value is:',desD.int$Ge,'. Ge for optimal design is 1.', sep=''),
                   paste('Diagonality value is:',desD.eval$diagonality,'. Diagonality for minimal confounding is 1.', sep=''))
     
+    for(i in 1:length(dat$levels)){	
+        x<- suggested.trials[,i]# replace with levels
+        x.in<- unique(x)
+        for(j in 1:length(x.in)){
+            suggested.trials[which(x.in[j]==x),i]<- levels2[[i]][j]}
+    } 
+    
+    # return:
     suggested.trials.ser<- serialize(list(Trials=suggested.trials),connection=NULL)
     #pred.name<- 'suggestedTrials'
-    pred.name<- c(paste('suggestedTrials_',dat$varNames,sep=''),'suggestedTrials')
+    pred.name<- c(paste('suggestedTrials_',dat$varNames,sep=''),'suggestedTrials',parameters$newY)
     
     desD.res<- list(design=desD.int$design,selected.rows=desD.int$rows,
                     norm.var=desD.int$Ge,confounding.effect=desD.eval$diagonality,

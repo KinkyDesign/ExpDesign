@@ -14,7 +14,7 @@ exp.design.noxy(dataset, predictionFeature, parameters)
 }
   \item{predictionFeature}{ character string specifying which is the prediction feature in dataEntry - NOT required
 }
-  \item{parameters}{A list with 7 objects: levels, nVars (number of variables), factors (which are the factor variables), varNames (variables' names), nTrials (the number of suggested trials, if 0 then an estimated number is suggested), criterion ('A', 'I', 'D'), form of the design ('linear','quad','cubic','cubicS')
+  \item{parameters}{A list with 8 objects: levels(list of vectors corresponding to particular levels per variable), nVars (number of variables), factors (which are the factor variables), varNames (variables' names), nTrials (the number of suggested trials, if 0 then an estimated number is suggested), criterion ('A', 'I', 'D'), form of the design ('linear','quad','cubic','cubicS'), newY (the name of the experimetal variable measured, dependent variable).
 }
 }
 
@@ -41,7 +41,9 @@ exp.design.noxy(dataset, predictionFeature, parameters)
 ##--	or do  help(data=index)  for the standard data sets.
 
 
-required.param<-  list(levels=3, nVars=3, factors='null', varNames=c('a','b','c'),nTrials=10,criterion='D',form='linear')
+required.param<-  list(nVars=3,varNames=c('a','b','c'),
+levels=list(a=c(30,40,NULL),b=c(10,20,30),c=c(0,1,2)),
+nTrials=6,criterion='D',form='linear',factors=0,newY='CA')
 
 
 exp.example<- exp.design.noxy(null,null,required.param) 

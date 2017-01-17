@@ -1,0 +1,10 @@
+Package: ExpDesignPkg3.0
+Type: Package
+Title: Experimental design
+Version: 1.0
+Date: 2016-09-08
+Author: Georgia Tsiliki
+Maintainer: Georgia Tsiliki <gtsiliki@central.ntua.gr>
+Depends: RCurl,pmml,jsonlite,AlgDesign,pls,DoseFinding
+Description: This package performs experimental design by employing algorithmic design R routines from the AlgDesign package. Dose-Response data experimental design is also employed. 
+License: GPL-2
